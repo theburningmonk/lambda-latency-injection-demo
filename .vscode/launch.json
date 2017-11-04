@@ -3,7 +3,24 @@
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
-  "configurations": [
+  "configurations": [    
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "public-api-b",
+      "program": "${workspaceFolder}/node_modules/.bin/sls",
+      "args": [
+        "invoke",
+        "local",
+        "-f",
+        "public-api-b",
+        "-p",
+        "examples/api.json"
+      ],
+      "env": {
+        "_X_AMZN_TRACE_ID": "Root=1-59fe27c6-4766399289a55ab6cf1c0cb9;Parent=3011c0fa10d88a65;Sampled=1"
+      }
+    },
     {
       "type": "node",
       "request": "launch",
@@ -15,7 +32,7 @@
         "-f",
         "public-api-a",
         "-p",
-        "examples/public-api-a.json"
+        "examples/api.json"
       ]
     }
   ]

@@ -1,24 +1,28 @@
 'use strict';
 
-const co           = require('co');
-const http         = require('../lib/http');
-const apiHandler   = require('../lib/apiHandler');
-const configClient = require('../lib/configClient');
-
-const configObj = configClient.loadConfigs([ "public-api-b.config" ]);
+const co         = require('co');
+const apiHandler = require('../lib/apiHandler');
+const injectable = require('../lib/injectable');
+const Promise    = require('bluebird');
+const AWS        = require('aws-sdk');
+const asyncDDB   = Promise.promisifyAll(new AWS.DynamoDB.DocumentClient());
+const dynamodb   = injectable.injectableAll(asyncDDB);
 
 module.exports.handler = apiHandler(
-  co.wrap(function* (event, context) {
-    let config      = JSON.parse(yield configObj.config);
-    let uri         = config.internalApi;
+  "public-api-b.config",
+  co.wrap(function* (event, context, config) {    
     let chaosConfig = config.chaosConfig || {};
     let latencyInjectionConfig = chaosConfig.latencyInjectionConfig;
     
-    let reply = yield http({ method : 'GET', uri, latencyInjectionConfig });
+    let req = {
+      TableName : 'latency-injection-demo-staging',
+      Key: { id: 'foo' }
+    };
+    let item = yield dynamodb.getAsync(req, latencyInjectionConfig);
     
     return {
       message : "everything is still awesome",
-      reply   : reply
+      reply   : item
     };
   })
 );
