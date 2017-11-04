@@ -15,7 +15,7 @@ module.exports.handler = apiHandler(
     let latencyInjectionConfig = chaosConfig.latencyInjectionConfig;
     
     let req = {
-      TableName : 'latency-injection-demo-staging',
+      TableName : 'latency-injection-demo-dev',
       Key: { id: 'foo' }
     };
     let item = yield dynamodb.getAsync(req, latencyInjectionConfig);
