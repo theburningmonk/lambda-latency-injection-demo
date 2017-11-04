@@ -3,16 +3,14 @@
 const co           = require('co');
 const http         = require('../lib/http');
 const apiHandler   = require('../lib/apiHandler');
-const configClient = require('../lib/configClient');
-
-const configObj = configClient.loadConfigs([ "public-api-a.config" ]);
 
 module.exports.handler = apiHandler(
-  co.wrap(function* (event, context) {
-    let config      = JSON.parse(yield configObj["public-api-a.config"]);
+  "public-api-a.config",
+  co.wrap(function* (event, context, configJson) {
+    let config      = JSON.parse(configJson);
     let uri         = config.internalApi;
     let chaosConfig = config.chaosConfig || {};
-    let latencyInjectionConfig = chaosConfig.latencyInjectionConfig;
+    let latencyInjectionConfig = chaosConfig.httpClientLatencyInjectionConfig;
     
     let reply = yield http({ method : 'GET', uri, latencyInjectionConfig });
     
