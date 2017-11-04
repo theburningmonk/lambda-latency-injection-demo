@@ -6,8 +6,7 @@ const apiHandler   = require('../lib/apiHandler');
 
 module.exports.handler = apiHandler(
   "public-api-a.config",
-  co.wrap(function* (event, context, configJson) {
-    let config      = JSON.parse(configJson);
+  co.wrap(function* (event, context, config) {
     let uri         = config.internalApi;
     let chaosConfig = config.chaosConfig || {};
     let latencyInjectionConfig = chaosConfig.httpClientLatencyInjectionConfig;

@@ -6,7 +6,7 @@ const configClient = require('../lib/configClient');
 
 module.exports.handler = apiHandler(
   null,
-  co.wrap(function* (event, context, configJson) {    
+  co.wrap(function* (event, context, config) {    
     return {
       message: "everything is... fine?"
     };
